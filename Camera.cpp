@@ -5,7 +5,7 @@
 
 Camera::Camera(float ar, glm::vec3 _up, glm::vec3 _lookDir, glm::vec3 _pos, GLFWwindow* _window, int w, int h) : upvec(_up), pos(_pos), window(_window), width(w), height(h)
 {
-	projection = glm::perspective(glm::radians(45.0f), ar, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(45.0f), ar, 0.1f, 1000.0f);
 	lookDir = glm::normalize(_lookDir);
 	updateView();
 	up	  = false;

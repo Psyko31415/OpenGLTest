@@ -1,6 +1,7 @@
 #include "ShapeGen.h"
 
 #define pi 3.14159265359f
+#define printvec(vec) std::cout << vec.x << " " << vec.y << " " << vec.z << std::endl
 
 glm::vec3 rotateAround(float degrees, glm::vec3 around, glm::vec3 original)
 {
@@ -28,9 +29,10 @@ void getArgs(std::string data, float & number, float & argv2)
 	}
 }
 
-void turn(float number, float argv2, glm::vec3 innerDir, glm::vec3 outerDir, glm::vec3 up, glm::vec3 & mapPos, glm::vec3 & mapDir, std::vector<VertexData> & vertices, std::vector<IndexData> & indices, GLushort nextIndex, float grayScale, float width)
+glm::vec3 turn(float number, float argv2, glm::vec3 innerDir, glm::vec3 outerDir, glm::vec3 up, glm::vec3 & mapPos, glm::vec3 & mapDir, std::vector<VertexData> & vertices, std::vector<IndexData> & indices, GLushort nextIndex, float grayScale, float width, float isGoingUp)
 {
 	float radius = argv2 > 1.0f ? argv2 : 1.0f;
+	float magicNumber = (32 / isGoingUp - 0.003f * isGoingUp) * (2.5f * width + 18.5) / radius * (isGoingUp > 0 ? 1.0f : -1.0f);	
 	glm::vec3 innerCorner = mapPos + innerDir * width / 2.0f;
 	glm::vec3 outerCorner = mapPos + outerDir * width / 2.0f;
 	glm::vec3 offset = outerCorner + innerDir * radius;
@@ -40,16 +42,18 @@ void turn(float number, float argv2, glm::vec3 innerDir, glm::vec3 outerDir, glm
 
 	glm::vec3 outerVert, innerVert;
 
-	//int sections = ceil(abs(number) * sqrt(radius) / (15.0f));
-	int sections = 10;
+	int sections = ceil(abs(number) * sqrt(radius) / (15.0f));
+
 	for (int i = 0; i < sections; i++)
 	{
 		float angle = number / (float)(sections) * (i + 1);
 
-		glm::vec3 unitRotation = rotateAround(angle, up , mapDir);
+		glm::vec3 unitRotation = rotateAround(angle, up, outerDir);
 
-		innerVert = mapPos + glm::cross(unitRotation, up) * width / 2.0f;
-		outerVert = mapPos - glm::cross(unitRotation, up) * width / 2.0f;
+		outerVert = unitRotation * radius + offset;
+		innerVert = unitRotation * (radius - width) + offset;
+		outerVert.y += (i + 1) / magicNumber;
+		innerVert.y += (i + 1) / magicNumber;
 
 		vertices.push_back({ { outerVert.x, outerVert.y, outerVert.z },{ grayScale, grayScale, grayScale } });
 		vertices.push_back({ { innerVert.x, innerVert.y, innerVert.z },{ grayScale, grayScale, grayScale } });
@@ -61,10 +65,10 @@ void turn(float number, float argv2, glm::vec3 innerDir, glm::vec3 outerDir, glm
 
 		indices.push_back({ outeri, inneri, lastinneri });
 		indices.push_back({ lastinneri, lastouteri, outeri });
-		mapPos = (innerVert + outerVert) / 2.0f;
 	}
 	mapPos = (innerVert + outerVert) / 2.0f;
 	mapDir = rotateAround(number, up, mapDir);
+	return up;
 }
 
 glm::vec3 rotateDown(float number, float argv2, glm::vec3 & up, glm::vec3 left, glm::vec3 right, glm::vec3 & mapPos, glm::vec3 & mapDir, std::vector<VertexData> & vertices, std::vector<IndexData> & indices, GLushort nextIndex, float grayScale, float width)
@@ -85,7 +89,7 @@ glm::vec3 rotateDown(float number, float argv2, glm::vec3 & up, glm::vec3 left, 
 		glm::vec3 rotation = rotateAround(number / (float)(sections) * (i + 1), left, up) * radius;
 
 		leftVert = rotation + radius * -up + leftCorner;
-		rightVert = rotation  + radius * -up + rightCorner;
+		rightVert = rotation + radius * -up + rightCorner;
 
 		vertices.push_back({ { leftVert.x, leftVert.y, leftVert.z },{ grayScale, grayScale, grayScale } });
 		vertices.push_back({ { rightVert.x, rightVert.y, rightVert.z },{ grayScale, grayScale, grayScale } });
@@ -101,7 +105,7 @@ glm::vec3 rotateDown(float number, float argv2, glm::vec3 & up, glm::vec3 left, 
 	mapPos = (rightVert + leftVert) / 2.0f;
 
 	mapDir = rotateAround(number, left, mapDir);
-	return -glm::cross(mapDir, right);
+	return glm::normalize(glm::cross(right, mapDir));
 }
 
 Sprite * ShapeGen::raceMap(const char * filePath, float grayScale, float width, GLuint program)
@@ -116,9 +120,8 @@ Sprite * ShapeGen::raceMap(const char * filePath, float grayScale, float width, 
 		glm::vec3 up(0.0f, 1.0f, 0.0f);
 		glm::vec3 absUp = up;
 		char lastAction = '\0';
-
+		float dir = 0;
 		bool rotatedRight = false, rotatedLeft = false;
-
 		std::string command;
 		while (std::getline(f, command, ';'))
 		{
@@ -141,35 +144,42 @@ Sprite * ShapeGen::raceMap(const char * filePath, float grayScale, float width, 
 
 			if (actionMatches('F', action))
 			{
-				vertices.push_back({ { nextPos.x + left.x * width / 2, nextPos.y + left.y * width / 2, nextPos.z + left.z * width / 2 },{ grayScale, grayScale, grayScale } });
-				vertices.push_back({ { nextPos.x + right.x * width / 2, nextPos.y + right.y * width / 2, nextPos.z + right.z * width / 2 },{ grayScale, grayScale, grayScale } });
+				glm::vec3 tl = nextPos + left * width * (0.5f + 1.0f - cos(glm::radians(dir)));
+				glm::vec3 tr = nextPos + right * width * (0.5f + 1.0f - cos(glm::radians(dir)));
+				glm::vec3 bl = mapPos + left * width * (0.5f + 1.0f - cos(glm::radians(dir)));
+				glm::vec3 br = mapPos + right * width * (0.5f + 1.0f - cos(glm::radians(dir)));
 
-				vertices.push_back({ { mapPos.x + left.x * width / 2, mapPos.y + left.y * width / 2, mapPos.z + left.z * width / 2 },{ grayScale, grayScale, grayScale } });
-				vertices.push_back({ { mapPos.x + right.x * width / 2, mapPos.y + right.y * width / 2, mapPos.z + right.z * width / 2 },{ grayScale, grayScale, grayScale } });
+				vertices.push_back({ { tl.x, tl.y, tl.z },{ grayScale, grayScale, grayScale } });
+				vertices.push_back({ { tr.x, tr.y, tr.z },{ grayScale, grayScale, grayScale } });
+
+				vertices.push_back({ { bl.x, bl.y, bl.z },{ grayScale, grayScale, grayScale } });
+				vertices.push_back({ { br.x, br.y, br.z },{ grayScale, grayScale, grayScale } });
 
 				GLushort nextIndex1 = nextIndex + 1;
 				GLushort nextIndex2 = nextIndex + 2;
 				GLushort nextIndex3 = nextIndex + 3;
 
-				indices.push_back({ nextIndex, nextIndex1, nextIndex2});
-				indices.push_back({ nextIndex1, nextIndex3, nextIndex2});
+				indices.push_back({ nextIndex, nextIndex1, nextIndex2 });
+				indices.push_back({ nextIndex1, nextIndex3, nextIndex2 });
 
 				mapPos = nextPos;
 			}
 			else if (actionMatches('R', action))
 			{
-				turn(-number, argv2, right, left, absUp, mapPos, mapDir, vertices, indices, nextIndex, grayScale, width);
+				up = turn(-number, argv2, right, left, absUp, mapPos, mapDir, vertices, indices, nextIndex, grayScale, width, dir);
 			}
 			else if (actionMatches('L', action))
 			{
-				turn(number, argv2, left, right, absUp, mapPos, mapDir, vertices, indices, nextIndex, grayScale, width);
+				up = turn(number, argv2, left, right, absUp, mapPos, mapDir, vertices, indices, nextIndex, grayScale, width, dir);
 			}
 			else if (actionMatches('U', action))
 			{
+				dir += number;
 				up = rotateDown(-number, argv2, -absUp, left, right, mapPos, mapDir, vertices, indices, nextIndex, grayScale, width);
 			}
 			else if (actionMatches('D', action))
 			{
+				dir -= number;
 				up = rotateDown(number, argv2, absUp, left, right, mapPos, mapDir, vertices, indices, nextIndex, grayScale, width);
 			}
 			else if (actionMatches('W', action))
@@ -248,8 +258,8 @@ Sprite * ShapeGen::plane(float width, float depth, float shade, GLuint program)
 	float width2 = width / 2, depth2 = depth / 2;
 
 	VertexData vertices[] = {
-		{{-width2, 0.0f, depth2},
-		{ shade, shade, shade }},
+		{ { -width2, 0.0f, depth2 },
+		{ shade, shade, shade } },
 
 		{ { width2, 0.0f, depth2 },
 		{ shade, shade, shade } },
