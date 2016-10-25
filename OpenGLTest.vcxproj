@@ -89,12 +89,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Anton\Desktop\c++\middleware\glew\include;C:\Users\Anton\Desktop\c++\middleware\glm\gtc;C:\Users\Anton\Desktop\c++\middleware\glm\;C:\Users\Anton\Desktop\c++\middleware\glfw\include\GLFW</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\gllib\glew\include;$(ProjectDir)\..\gllib\glm\gtc;$(ProjectDir)\..\gllib\glm\;$(ProjectDir)\..\gllib\glfw\include\GLFW</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Anton\Desktop\c++\middleware\glew\bin\Release\Win32;C:\Users\Anton\Desktop\c++\middleware\glfw\lib-vc2015;C:\Users\Anton\Desktop\c++\middleware\glew\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)\..\gllib\glew\bin\Release\Win32;$(ProjectDir)\..\gllib\glfw\lib-vc2015;$(ProjectDir)\..\gllib\glew\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;glfw3dll.lib;glew32.lib;glew32s.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
