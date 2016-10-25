@@ -28,7 +28,7 @@ private:
 	IndexData * indices;
 	int indexCount;
 	GLuint vbo, ibo, vao, program;
-	GLint vpUniformId, modelUniformId;
+	GLint mvpUniformId;
 
 	void bind();
 	void unbind();
@@ -40,6 +40,6 @@ public:
 	VertexData * getVertices();
 	IndexData * getIndices();
 
-	void render(glm::mat4 vp, glm::mat4 model);
+	void render(glm::mat4 mvp);
 	void cleanup();
 };

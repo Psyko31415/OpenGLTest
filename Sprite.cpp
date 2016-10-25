@@ -2,7 +2,7 @@
 
 void Sprite::render(glm::mat4 vp)
 {
-	mesh->render(vp, translateMat * scaleMat * rotateMat);
+	mesh->render(vp * translateMat * scaleMat * rotateMat);
 }
 
 void Sprite::translate(float x, float y, float z)

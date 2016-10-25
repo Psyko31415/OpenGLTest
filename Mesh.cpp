@@ -17,8 +17,7 @@ Mesh::Mesh(int vc, VertexData * verts, int ic, IndexData * indes, GLuint _progra
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
 
-	vpUniformId = glGetUniformLocation(program, "vp");
-	modelUniformId = glGetUniformLocation(program, "model");
+	mvpUniformId = glGetUniformLocation(program, "mvp");
 
 	unbind();
 }
@@ -28,12 +27,11 @@ Mesh::~Mesh()
 	unbind();
 }
 
-void Mesh::render(glm::mat4 vp, glm::mat4 model)
+void Mesh::render(glm::mat4 mvp)
 {
 	bind();
 	
-	glUniformMatrix4fv(vpUniformId, 1, GL_FALSE, &vp[0][0]);
-	glUniformMatrix4fv(modelUniformId, 1, GL_FALSE, &model[0][0]);
+	glUniformMatrix4fv(mvpUniformId, 1, GL_FALSE, &mvp[0][0]);
 	glDrawElements(GL_TRIANGLES, indexCount * sizeof(indices[0]) / sizeof(indices[0].i1), GL_UNSIGNED_SHORT, 0);
 
 	unbind();
