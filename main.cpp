@@ -66,6 +66,7 @@ int main(int argc, char ** argv)
 	}
 
 	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_CULL_FACE);
 
 	cam = new Camera((float)WIDTH / HEIGHT, glm::vec3(0, 1, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), window, WIDTH, HEIGHT);
 
@@ -81,14 +82,14 @@ int main(int argc, char ** argv)
 	float rot = 0.0f;
 
 	int frameCount = 0;
-	double startTime = time(0);
+	double startTime = (double)time(0);
 
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && !glfwWindowShouldClose(window))
 	{
 		frameCount++;
 		if (time(0) - startTime >= 1)
 		{
-			startTime = time(0);
+			startTime = (double)time(0);
 			printf("FPS: %d\n", frameCount);
 			frameCount = 0;
 		}
