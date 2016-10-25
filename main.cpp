@@ -6,11 +6,13 @@
 #include <glm.hpp>
 #include <matrix_transform.hpp>
 #include <ctime>
+#include <stdio.h>
+#include <direct.h>
 
 #include "Sprite.h"
 #include "Camera.h"
 #include "ShapeGen.h"
-
+#define CD_BUFFER_SIZE 100
 const int WIDTH = 1024, HEIGHT = 768;
 
 GLuint createProgram(const char * vertPath, const char * fragPath);
@@ -23,6 +25,10 @@ Camera* cam;
 
 int main(int argc, char ** argv)
 {
+	if (argc >= 2)
+	{
+		_chdir(argv[1]);
+	}
 	if (!glfwInit())
 	{
 		std::cout << "Failed to init glfw" << std::endl;
@@ -63,10 +69,10 @@ int main(int argc, char ** argv)
 
 	cam = new Camera((float)WIDTH / HEIGHT, glm::vec3(0, 1, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), window, WIDTH, HEIGHT);
 
-	GLuint program = createProgram("c++/OpenGLTest/vert1.vert", "c++/OpenGLTest/frag1.frag");
+	GLuint program = createProgram("vert1.vert", "frag1.frag");
 
 	Sprite * sprite = ShapeGen::pyramid(1.0f, 3.0f, 1.0f, program);
-	Sprite * map = ShapeGen::raceMap("c++/OpenGLTest/test1.map", 0.5f, 1.5f, program);
+	Sprite * map = ShapeGen::raceMap("test1.map", 0.5f, 1.5f, program);
 	if (map == nullptr)
 	{
 		return -1;
