@@ -1,5 +1,9 @@
 #include "RaceGen.h"
 
+#define printvec(vec) std::cout << vec.x << " " << vec.y << " " << vec.z << std::endl
+#define ACTION_HISTORY_LEN 4
+
+
 
 glm::vec3 rotateAround(glm::vec3 original, glm::vec3 around, float degrees)
 {
@@ -22,6 +26,43 @@ void getArgs(std::string data, float & argv1, float & argv2)
 	}
 }
 
+bool invalidAction(char pair1, char pair2, char check1, char check2)
+{
+	return (check1 == pair1 && check2 == pair2) || (check2 == pair1 && check1 == pair2);
+}
+
+bool actionValid(char action, float argv1, float argv2, char * lastActions)
+{
+	static int lastActionPos = 0;
+
+	if (action == 'F')
+	{
+		memset(lastActions, 0, ACTION_HISTORY_LEN * sizeof(char));
+	}
+	else
+	{
+		for (int i = 0; i < ACTION_HISTORY_LEN; i++)
+		{
+			if (invalidAction('R', 'L', action, lastActions[i]) || invalidAction('U', 'D', action, lastActions[i]))
+			{
+				printf("Error: Action %c not allowed with %c befor a F-action\n", action, lastActions[i]);
+				return false;
+			}
+			if (action == lastActions[i])
+			{
+				printf("Error: Action %c appears twice before a F-action\n", action);
+				return false;
+			}
+		}
+	}
+	if (action == 'R' || action == 'L' && argv1 > 90)
+	{
+		printf("Turns over 90 degrees are not allowed");
+		return false;
+	}
+	return true;
+}
+
 Sprite * raceMap2(const char * filePath, float grayScale, GLuint program)
 {
 	std::ifstream f(filePath);
@@ -35,9 +76,13 @@ Sprite * raceMap2(const char * filePath, float grayScale, GLuint program)
 		glm::vec3 mapPos(0.0f, 0.0f, 0.0f);
 		glm::vec3 mapDir(1.0f, 0.0f, 0.0f);
 		glm::vec3 up(0.0f, 1.0f, 0.0f);
-		
-		float dir = 0;
+		glm::vec3 lastTurnMapDir = mapDir;
+
 		std::string command;
+
+		bool turned = false;
+		GLushort lastTLIndex = 0, lastTRIndex = 1;
+		char lastActions[ACTION_HISTORY_LEN] = {0};
 
 		while (std::getline(f, command, ';'))
 		{
@@ -51,12 +96,24 @@ Sprite * raceMap2(const char * filePath, float grayScale, GLuint program)
 			float argv1, argv2;
 			getArgs(command.substr(1), argv1, argv2);
 
+			if (!actionValid(action, argv1, argv2, lastActions))
+			{
+
+			}
+
 			glm::vec3 right = glm::cross(mapDir, up);
-			GLushort nextIndex = (GLushort)vertices.size();
 
 			if (action == 'F')
 			{
+				GLushort nextIndex = (GLushort)vertices.size();
+
+				if (turned)
+				{
+					mapPos += (lastTurnMapDir + mapDir) * (width / 2.0f);
+				}
+
 				glm::vec3 nextPos = mapPos + mapDir * argv1;
+
 				glm::vec3 tl = nextPos - right * width / 2.0f;
 				glm::vec3 tr = nextPos + right * width / 2.0f;
 				glm::vec3 bl = mapPos - right * width / 2.0f;
@@ -74,15 +131,28 @@ Sprite * raceMap2(const char * filePath, float grayScale, GLuint program)
 				indices.push_back({ nextIndex, nextIndex1, nextIndex3 });
 				indices.push_back({ nextIndex1, nextIndex2, nextIndex3 });
 
+				if (turned)
+				{
+					indices.push_back({ nextIndex3, nextIndex2, lastTRIndex });
+					indices.push_back({ nextIndex3, lastTRIndex, lastTLIndex });
+				}
+
+				turned = false;
 				mapPos = nextPos;
+				lastTLIndex = nextIndex;
+				lastTRIndex = nextIndex1;
 			}
 			else if (action == 'R')
 			{
+				lastTurnMapDir = mapDir;
 				mapDir = rotateAround(mapDir, up, -argv1);
+				turned = true;
 			}
 			else if (action == 'L')
 			{
+				lastTurnMapDir = mapDir;
 				mapDir = rotateAround(mapDir, up, argv1);
+				turned = true;
 			}
 			else if (action == 'U')
 			{
