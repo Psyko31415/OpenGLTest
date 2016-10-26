@@ -3,7 +3,7 @@
 #define pi 3.14159265359f
 #define printvec(vec) std::cout << vec.x << " " << vec.y << " " << vec.z << std::endl
 
-glm::vec3 rotateAround(float degrees, glm::vec3 around, glm::vec3 original)
+/*glm::vec3 rotateAround(float degrees, glm::vec3 around, glm::vec3 original)
 {
 	return glm::vec3(glm::normalize(glm::rotate(glm::mat4(1.0f), glm::radians(degrees), around) * glm::vec4(original, 0.0f)));
 }
@@ -211,7 +211,7 @@ Sprite * ShapeGen::raceMap(const char * filePath, float grayScale, float width, 
 		printf("Could not open file %s\n", filePath);
 		return nullptr;
 	}
-}
+}*/
 
 Sprite * ShapeGen::pyramid(float width, float height, float depth, GLuint program)
 {

@@ -12,6 +12,8 @@
 #include "Sprite.h"
 #include "Camera.h"
 #include "ShapeGen.h"
+#include "RaceGen.h"
+
 #define CD_BUFFER_SIZE 100
 const int WIDTH = 1024, HEIGHT = 768;
 
@@ -68,12 +70,12 @@ int main(int argc, char ** argv)
 	glEnable(GL_DEPTH_TEST);
 	//glEnable(GL_CULL_FACE);
 
-	cam = new Camera((float)WIDTH / HEIGHT, glm::vec3(0, 1, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), window, WIDTH, HEIGHT);
+	cam = new Camera((float)WIDTH / HEIGHT, glm::vec3(0, 1, 0), glm::normalize(glm::vec3(1, 1, 1)), glm::vec3(0, 0, 0), window, WIDTH, HEIGHT);
 
 	GLuint program = createProgram("vert1.vert", "frag1.frag");
 
 	Sprite * sprite = ShapeGen::pyramid(1.0f, 3.0f, 1.0f, program);
-	Sprite * map = ShapeGen::raceMap("test1.map", 0.5f, 1.5f, program);
+	Sprite * map = raceMap2("test1.map", 0.5f, program);
 	if (map == nullptr)
 	{
 		return -1;
