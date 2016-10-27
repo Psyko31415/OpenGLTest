@@ -3,9 +3,7 @@
 #define printvec(vec) std::cout << vec.x << " " << vec.y << " " << vec.z << std::endl
 #define ACTION_HISTORY_LEN 4
 
-
-
-glm::vec3 rotateAround(glm::vec3 original, glm::vec3 around, float degrees)
+glm::vec3 rotate(glm::vec3 original, glm::vec3 around, float degrees)
 {
 	return glm::vec3(glm::normalize(glm::rotate(glm::mat4(1.0f), glm::radians(degrees), around) * glm::vec4(original, 0.0f)));
 }
@@ -45,7 +43,7 @@ bool actionValid(char action, float argv1, float argv2, char * lastActions)
 		{
 			if (invalidAction('R', 'L', action, lastActions[i]) || invalidAction('U', 'D', action, lastActions[i]))
 			{
-				printf("Error: Action %c not allowed with %c befor a F-action\n", action, lastActions[i]);
+				printf("Error: Action %c not allowed with %c before a F-action\n", action, lastActions[i]);
 				return false;
 			}
 			if (action == lastActions[i])
@@ -54,10 +52,11 @@ bool actionValid(char action, float argv1, float argv2, char * lastActions)
 				return false;
 			}
 		}
+		lastActions[lastActionPos++] = action;
 	}
-	if (action == 'R' || action == 'L' && argv1 > 90)
+	if ((action == 'R' || action == 'L') && argv1 > 90)
 	{
-		printf("Turns over 90 degrees are not allowed");
+		printf("Error: Turns over 90 degrees are not allowed");
 		return false;
 	}
 	return true;
@@ -88,7 +87,7 @@ Sprite * raceMap2(const char * filePath, float grayScale, GLuint program)
 		{
 			if (command.size() < 2)
 			{
-				std::cout << "Command " << command << " is too short" << std::endl;
+				std::cout << "Error: Command " << command << " is too short" << std::endl;
 				return nullptr;
 			}
 
@@ -98,7 +97,7 @@ Sprite * raceMap2(const char * filePath, float grayScale, GLuint program)
 
 			if (!actionValid(action, argv1, argv2, lastActions))
 			{
-
+				return nullptr;
 			}
 
 			glm::vec3 right = glm::cross(mapDir, up);
@@ -145,24 +144,24 @@ Sprite * raceMap2(const char * filePath, float grayScale, GLuint program)
 			else if (action == 'R')
 			{
 				lastTurnMapDir = mapDir;
-				mapDir = rotateAround(mapDir, up, -argv1);
+				mapDir = rotate(mapDir, up, -argv1);
 				turned = true;
 			}
 			else if (action == 'L')
 			{
 				lastTurnMapDir = mapDir;
-				mapDir = rotateAround(mapDir, up, argv1);
+				mapDir = rotate(mapDir, up, argv1);
 				turned = true;
 			}
 			else if (action == 'U')
 			{
-				mapDir = rotateAround(mapDir, right, argv1);
-				up = rotateAround(up, right, argv1);
+				mapDir = rotate(mapDir, right, argv1);
+				up = rotate(up, right, argv1);
 			}
 			else if (action == 'D')
 			{
-				mapDir = rotateAround(mapDir, right, -argv1);
-				up = rotateAround(up, right, -argv1);
+				mapDir = rotate(mapDir, right, -argv1);
+				up = rotate(up, right, -argv1);
 			}
 		}
 		VertexData * verts = &vertices[0];
