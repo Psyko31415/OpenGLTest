@@ -5,16 +5,17 @@
 #include <glfw3.h>
 #include <glm.hpp>
 #include <matrix_transform.hpp>
-#include <ctime>
 #include <stdio.h>
 #include <direct.h>
+#include <Windows.h>
+#include <time.h>
+#include <cstdlib>
 
 #include "Sprite.h"
 #include "Camera.h"
 #include "ShapeGen.h"
-#include "RaceGen.h"
+#include "TileMap.h"
 
-#define CD_BUFFER_SIZE 100
 const int WIDTH = 1024, HEIGHT = 768;
 
 GLuint createProgram(const char * vertPath, const char * fragPath);
@@ -37,6 +38,8 @@ int main(int argc, char ** argv)
 		return -1;
 	}
 
+	srand((unsigned)time(0));
+
 	glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -44,7 +47,7 @@ int main(int argc, char ** argv)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	GLFWwindow * window;
-	window = glfwCreateWindow(WIDTH, HEIGHT, "OPENGL PLAYGROUND", NULL, NULL);
+	window = glfwCreateWindow(WIDTH, HEIGHT, "!Minecraft", NULL, NULL);
 
 	if (!window)
 	{
@@ -68,45 +71,51 @@ int main(int argc, char ** argv)
 	}
 
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_CULL_FACE);
+	// glEnable(GL_CULL_FACE);
 
 	cam = new Camera((float)WIDTH / HEIGHT, glm::vec3(0, 1, 0), glm::normalize(glm::vec3(1, 1, 1)), glm::vec3(0, 0, 0), window, WIDTH, HEIGHT);
 
 	GLuint program = createProgram("vert1.vert", "frag1.frag");
 
 	Sprite * sprite = ShapeGen::pyramid(1.0f, 3.0f, 1.0f, program);
-	Sprite * map = raceMap2("test1.map", 0.5f, program);
-	if (map == nullptr)
-	{
-		return -1;
-	}
-
+	TileMap tm(128, 64, 128, 0.5f, 0.5f, program);
 	float rot = 0.0f;
 
+	SYSTEMTIME st;
+	GetSystemTime(&st);
+	double fps = 60;
+	double startTime = st.wMilliseconds + st.wSecond * 1000;
+	double targetTime = 1000.0 / fps;
 	int frameCount = 0;
-	double startTime = (double)time(0);
+	double timePassed = 0;
 
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && !glfwWindowShouldClose(window))
 	{
 		frameCount++;
-		if (time(0) - startTime >= 1)
+		GetSystemTime(&st);
+		double currentTime = st.wMilliseconds + st.wSecond * 1000;
+		double elapsed = currentTime - startTime;
+		startTime = currentTime;
+		timePassed += elapsed;
+
+		if (timePassed > 1000)
 		{
-			startTime = (double)time(0);
-			printf("FPS: %d\n", frameCount);
+			std::cout << "FPS: " << frameCount << std::endl;
 			frameCount = 0;
+			timePassed -= 1000;
 		}
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glfwPollEvents();
 		sprite->rotate(rot, 0, 1, 0);
 		sprite->render(cam->getVp());
-		map->render(cam->getVp());
+		tm.render(cam->getVp());
 
 		glfwSwapBuffers(window);
 		cam->update();
 		rot += 0.01f;
 	}
 
-	map->cleanup();
 	sprite->cleanup();
 	delete cam;
 	return 0;

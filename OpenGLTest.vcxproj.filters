@@ -6,18 +6,21 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="ShapeGen.cpp" />
-    <ClCompile Include="RaceGen.cpp" />
+    <ClCompile Include="TileMap.cpp" />
+    <ClCompile Include="HeighMap.cpp" />
+    <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vert1.vert" />
     <None Include="frag1.frag" />
-    <None Include="test1.map" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="ShapeGen.h" />
-    <ClInclude Include="RaceGen.h" />
+    <ClInclude Include="TileMap.h" />
+    <ClInclude Include="HeighMap.h" />
+    <ClInclude Include="utils.h" />
   </ItemGroup>
 </Project>
