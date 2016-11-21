@@ -78,7 +78,7 @@ int main(int argc, char ** argv)
 	GLuint program = createProgram("vert1.vert", "frag1.frag");
 
 	Sprite * sprite = ShapeGen::pyramid(1.0f, 3.0f, 1.0f, program);
-	TileMap tm(2, 16, 2, 0.5f, program);
+	TileMap tm(16, 32, 16, 1.0f, program);
 	float rot = 0.0f;
 
 	SYSTEMTIME st;
