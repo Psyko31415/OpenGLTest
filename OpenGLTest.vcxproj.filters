@@ -9,6 +9,8 @@
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="HeighMap.cpp" />
     <ClCompile Include="utils.cpp" />
+    <ClCompile Include="Block.cpp" />
+    <ClCompile Include="Chunk.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vert1.vert" />
@@ -22,5 +24,7 @@
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="HeighMap.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="Block.h" />
+    <ClInclude Include="Chunk.h" />
   </ItemGroup>
 </Project>

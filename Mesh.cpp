@@ -3,6 +3,7 @@
 Mesh::Mesh(int vc, VertexData * verts, int ic, IndexData * indes, GLuint _program) : vertexCount(vc), indexCount(ic), vertices(verts), indices(indes), program(_program)
 {
 	std::cout << "vc: " << vc << " ic: " << ic << std::endl;
+	std::cout << "mem: " << (vc * sizeof(VertexData) + ic * sizeof(IndexData)) / 1000000 << " MB" << std::endl;
 	glGenVertexArrays(1, &vao);
 	glGenBuffers(1, &vbo);
 	glGenBuffers(1, &ibo);
@@ -65,6 +66,9 @@ IndexData * Mesh::getIndices()
 
 void Mesh::cleanup()
 {
+	unbind();
+	glDeleteBuffers(1, &vbo);
+	glDeleteBuffers(1, &ibo);
 	delete vertices;
 	delete indices;
 }

@@ -1,42 +1,26 @@
 #pragma once
 
-#include <string>
-#include <vector>
+#include <GL/glew.h>
+#include <glm.hpp>
 
-#include "Sprite.h"
 #include "utils.h"
 #include "HeighMap.h"
-
-typedef enum 
-{
-	TILE_EMPTY = 0,
-	TILE_SOLID = 1
-} Tile;
-
-typedef struct 
-{
-	uint x, y, z;
-} TileMapPos;
+#include "Chunk.h"
 
 class TileMap
 {
 private:
-	uint width, height, depth;
-	Tile * tiles;
-	Sprite * sprite;
-
-	Tile& get(TileMapPos pos);
+	Chunk * chunks;
+	uint chunkw, chunkd, arrsize;
+	HeightType chunkh;
+	HeightMap hm;
 
 public:
-	TileMap(uint _width, uint _height, uint _depth, float size, float greyScale, GLuint program);
+	TileMap(uint _chunkw, HeightType _chunkh, uint _chunkd, float blocksize, GLuint program);
 	~TileMap();
 
-	Tile& operator[](TileMapPos pos);
-
-	uint getw();
-	uint geth();
-	uint getd();
-
 	void render(glm::mat4 vp);
+	void genMesh(float size, GLuint program);
+	Chunk& get(uint x, uint z);
 };
 

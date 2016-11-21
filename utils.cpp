@@ -10,21 +10,19 @@ int randi(int min, int max)
 	return min + rand() % (max - min);
 }
 
-void cube(float width, float greyScale, std::vector<VertexData>& verts, std::vector<IndexData>& inds, glm::vec3 offsetVerts)
+void cube(float width, Float3 color, Float3 color2, std::vector<VertexData>& verts, std::vector<IndexData>& inds, glm::vec3 offsetVerts)
 {
-	verts.reserve(verts.size() + cubeVerts);
-	inds.reserve(inds.size() + cubeInds);
 	float halfWidth = width / 2.0f;
 	GLushort offsetInds = (GLushort)verts.size();
 
-	verts.push_back({ { -halfWidth + offsetVerts.x,  halfWidth + offsetVerts.y,  halfWidth + offsetVerts.z },{ 1.0f, 0.0f, 0.0f } });
-	verts.push_back({ { halfWidth + offsetVerts.x,  halfWidth + offsetVerts.y,  halfWidth + offsetVerts.z },{ 0.0f, 1.0f, 0.0f } });
-	verts.push_back({ { -halfWidth + offsetVerts.x,  halfWidth + offsetVerts.y, -halfWidth + offsetVerts.z },{ 0.0f, 0.0f, 1.0f } });
-	verts.push_back({ { halfWidth + offsetVerts.x,  halfWidth + offsetVerts.y, -halfWidth + offsetVerts.z },{ 1.0f, 1.0f, 0.0f } });
-	verts.push_back({ { -halfWidth + offsetVerts.x, -halfWidth + offsetVerts.y,  halfWidth + offsetVerts.z },{ 0.0f, 1.0f, 0.0f } });
-	verts.push_back({ { halfWidth + offsetVerts.x, -halfWidth + offsetVerts.y,  halfWidth + offsetVerts.z },{ 0.0f, 0.0f, 1.0f } });
-	verts.push_back({ { -halfWidth + offsetVerts.x, -halfWidth + offsetVerts.y, -halfWidth + offsetVerts.z },{ 1.0f, 0.0f, 0.0f } });
-	verts.push_back({ { halfWidth + offsetVerts.x, -halfWidth + offsetVerts.y, -halfWidth + offsetVerts.z },{ 1.0f, 0.0f, 1.0f } });
+	verts.push_back({ { -halfWidth + offsetVerts.x,  halfWidth + offsetVerts.y,  halfWidth + offsetVerts.z }, color });
+	verts.push_back({ {  halfWidth + offsetVerts.x,  halfWidth + offsetVerts.y,  halfWidth + offsetVerts.z }, color });
+	verts.push_back({ { -halfWidth + offsetVerts.x,  halfWidth + offsetVerts.y, -halfWidth + offsetVerts.z }, color });
+	verts.push_back({ {  halfWidth + offsetVerts.x,  halfWidth + offsetVerts.y, -halfWidth + offsetVerts.z }, color });
+	verts.push_back({ { -halfWidth + offsetVerts.x, -halfWidth + offsetVerts.y,  halfWidth + offsetVerts.z }, color2 });
+	verts.push_back({ {  halfWidth + offsetVerts.x, -halfWidth + offsetVerts.y,  halfWidth + offsetVerts.z }, color2 });
+	verts.push_back({ { -halfWidth + offsetVerts.x, -halfWidth + offsetVerts.y, -halfWidth + offsetVerts.z }, color2 });
+	verts.push_back({ {  halfWidth + offsetVerts.x, -halfWidth + offsetVerts.y, -halfWidth + offsetVerts.z }, color2 });
 
 	GLushort i0 = offsetInds + 0;
 	GLushort i1 = offsetInds + 1;

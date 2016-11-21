@@ -1,60 +1,63 @@
 #include "TileMap.h"
 
-// private functions
-void cube(float width, float greyScale, std::vector<VertexData>& verts, std::vector<IndexData>& inds, glm::vec3 offsetVerts);
-// private functions end
-
-TileMap::TileMap(uint _width, uint _height, uint _depth, float size, float greyScale, GLuint program) : width(_width), height(_height), depth(_depth)
+TileMap::TileMap(uint _chunkw, HeightType _chunkh, uint _chunkd, float blocksize, GLuint program) : chunkw(_chunkw), chunkh(_chunkh), chunkd(_chunkd), arrsize(chunkd * chunkw)
 {
-	tiles = new Tile[width * height * depth];
-	memset(tiles, 0, width * height * depth);
-
-	HeightMap hm(1, 10, 1, 2, width / HEIGHT_MAP_TILE_RATIO, depth / HEIGHT_MAP_TILE_RATIO);
+	chunks = new Chunk[chunkw * chunkd];
+	hm.generate(1, chunkh / HEIGHT_MAP_TILE_RATIO , 1, 2, chunkw, chunkd);
 	hm.print();
-	std::vector<VertexData> vertices;
-	std::vector<IndexData> indices;
 
-	hm.mesh(vertices, indices, size * HEIGHT_MAP_TILE_RATIO, greyScale);
+	for (uint chunkx = 0; chunkx < chunkw; chunkx++)
+	{
+		for (uint chunkz = 0; chunkz < chunkd; chunkz++)
+		{
+			Chunk& chunk = get(chunkx, chunkz);
+			chunk.init(chunkh);
 
-	VertexData * verts = new VertexData[vertices.size()];
-	IndexData * inds = new IndexData[indices.size()];
-	memcpy(verts, &vertices[0], vertices.size() * sizeof(VertexData));
-	memcpy(inds, &indices[0], indices.size() * sizeof(IndexData));
+			HeightType baseh = hm.get(chunkx, chunkz);
 
-	Mesh * mesh = new Mesh(vertices.size(), verts, indices.size(), inds, program);
-	sprite = new Sprite(mesh);
-	sprite->translate(-32, -3 * HEIGHT_MAP_TILE_RATIO, -32); // tmp for debug
+			for (uint x = 0; x < CHUNK_SIZE; x++)
+			{
+				for (uint z = 0; z < CHUNK_SIZE; z++)
+				{
+					HeightType y = baseh;
+					y = y < chunkh ? y : chunkh - 1;
+					chunk.get(x, y, z) = BLOCK_GRASS;
+					for (int i = 0; i < y; i++)
+					{
+						chunk.get(x, i, z) = BLOCK_STONE;
+					}
+				}
+			}
+		}
+	}
+	genMesh(blocksize, program);
 }
 
 TileMap::~TileMap()
 {
-	delete tiles;
-	sprite->cleanup();
+	delete[] chunks;
 }
 
-Tile& TileMap::operator[](TileMapPos pos)
-{
-	return get(pos);
-}
-
-Tile& TileMap::get(TileMapPos pos)
-{
-	return tiles[pos.x + pos.y * width + pos.z * width * height];
-}
-
-uint TileMap::getw()
-{
-	return width;
-}
-uint TileMap::geth()
-{
-	return height;
-}
-uint TileMap::getd()
-{
-	return depth;
-}
 void TileMap::render(glm::mat4 vp)
 {
-	sprite->render(vp);
+	for (int i = 0; i < arrsize; i++)
+	{
+		chunks[i].render(vp);
+	}
+}
+
+void TileMap::genMesh(float size, GLuint program)
+{
+	for (uint x = 0; x < chunkw; x++)
+	{
+		for (uint z = 0; z < chunkd; z++)
+		{
+			get(x, z).genMesh(size, program, glm::vec3(x, 0, z) * (size * CHUNK_SIZE));
+		}
+	}
+}
+
+Chunk& TileMap::get(uint x, uint z)
+{
+	return chunks[x + z * chunkw];
 }
