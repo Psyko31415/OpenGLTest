@@ -5,7 +5,7 @@
 #include <glfw3.h>
 #include <matrix_transform.hpp>
 #include <iostream>
-#include "utils.h"
+#include "util\utils.h"
 
 class Camera
 {

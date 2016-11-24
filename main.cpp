@@ -11,12 +11,13 @@
 #include FT_FREETYPE_H
 #include <matrix_transform.hpp>
 
-#include "shader.h"
-#include "Sprite.h"
-#include "Camera.h"
-#include "ShapeGen.h"
-#include "TileMap.h"
-#include "Font.h"
+#include "core/util/shader.h"
+#include "core/util/utils.h"
+#include "core/render/Sprite.h"
+#include "core/Camera.h"
+#include "core/util/ShapeGen.h"
+#include "minecraft/TileMap.h"
+#include "core/render/font/Font.h"
 
 float WIDTH = 1024.0f, HEIGHT = 768.0f;
 
@@ -28,7 +29,7 @@ Camera* cam;
 
 int main(int argc, char ** argv)
 {
-	if (argc >= 2)
+ 	if (argc >= 2)
 	{
 		_chdir(argv[1]);
 	}
@@ -84,13 +85,13 @@ int main(int argc, char ** argv)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	GLuint textRenderingProgram = createProgram("text.vert", "text.frag");
+	GLuint textRenderingProgram = createProgram("res/shader/text/text.vert", "res/shader/text/text.frag");
 	glm::mat4 textRenderingProjection = glm::ortho(0.0f, WIDTH, 0.0f, HEIGHT);
 
-	GLuint program = createProgram("vert1.vert", "frag1.frag");
+	GLuint program = createProgram("res/shader/basic/vert1.vert", "res/shader/basic/frag1.frag");
 
-	cam = new Camera((float)WIDTH / HEIGHT, glm::vec3(0, 1, 0), glm::normalize(glm::vec3(1, 1, 1)), glm::vec3(0, 0, 0), window, WIDTH, HEIGHT);
-	Font testFont("consola.ttf", 16, ft);
+	cam = new Camera((float)WIDTH / HEIGHT, glm::vec3(0, 1, 0), glm::normalize(glm::vec3(1, 1, 1)), glm::vec3(0, 0, 0), window, (int)WIDTH, (int)HEIGHT);
+	Font testFont("res/font/consola.ttf", 16, ft);
 
 	Sprite * sprite = ShapeGen::pyramid(1.0f, 3.0f, 1.0f, program);
 	TileMap tm(2, 16, 2, 1.0f, program);
@@ -106,7 +107,7 @@ int main(int argc, char ** argv)
 	double timePassed = 0;
 	
 
-	glm::vec4 red = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	glm::vec4 red = glm::vec4(1.0f, 0.0f, 0.0f, 0.5f);
 
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && !glfwWindowShouldClose(window))
 	{

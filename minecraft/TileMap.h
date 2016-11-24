@@ -4,7 +4,7 @@
 #include <glm.hpp>
 #include <cmath>
 
-#include "utils.h"
+#include "../core/util/utils.h"
 #include "HeighMap.h"
 #include "Chunk.h"
 

@@ -3,8 +3,8 @@
 #include <iostream>
 #include <vector>
 
-#include "Mesh.h"
-#include "utils.h"
+#include "../core/render/Mesh.h"
+#include "../core/util/utils.h"
 
 class HeightMap
 {

@@ -2,7 +2,7 @@
 #include <glm.hpp>
 
 #include "Block.h"
-#include "Sprite.h"
+#include "../core/render/Sprite.h"
 
 class Chunk
 {

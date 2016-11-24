@@ -18,6 +18,42 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="core\Camera.cpp" />
+    <ClCompile Include="core\render\font\Font.cpp" />
+    <ClCompile Include="core\render\Mesh.cpp" />
+    <ClCompile Include="core\render\Sprite.cpp" />
+    <ClCompile Include="core\util\shader.cpp" />
+    <ClCompile Include="core\util\ShapeGen.cpp" />
+    <ClCompile Include="core\util\utils.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="minecraft\Block.cpp" />
+    <ClCompile Include="minecraft\Chunk.cpp" />
+    <ClCompile Include="minecraft\HeighMap.cpp" />
+    <ClCompile Include="minecraft\TileMap.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="core\Camera.h" />
+    <ClInclude Include="core\render\font\Font.h" />
+    <ClInclude Include="core\render\Mesh.h" />
+    <ClInclude Include="core\render\Sprite.h" />
+    <ClInclude Include="core\util\shader.h" />
+    <ClInclude Include="core\util\ShapeGen.h" />
+    <ClInclude Include="core\util\utils.h" />
+    <ClInclude Include="minecraft\Block.h" />
+    <ClInclude Include="minecraft\Chunk.h" />
+    <ClInclude Include="minecraft\HeighMap.h" />
+    <ClInclude Include="minecraft\TileMap.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shader\basic\frag1.frag" />
+    <None Include="res\shader\basic\vert1.vert" />
+    <None Include="res\shader\text\text.frag" />
+    <None Include="res\shader\text\text.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="res\font\consola.ttf" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5968574D-400F-47FA-BC59-66BF10669555}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -150,39 +186,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Block.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Chunk.cpp" />
-    <ClCompile Include="Font.cpp" />
-    <ClCompile Include="HeighMap.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="shader.cpp" />
-    <ClCompile Include="ShapeGen.cpp" />
-    <ClCompile Include="Sprite.cpp" />
-    <ClCompile Include="TileMap.cpp" />
-    <ClCompile Include="utils.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="frag1.frag" />
-    <None Include="text.frag" />
-    <None Include="text.vert" />
-    <None Include="vert1.vert" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Block.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Chunk.h" />
-    <ClInclude Include="Font.h" />
-    <ClInclude Include="HeighMap.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="shader.h" />
-    <ClInclude Include="ShapeGen.h" />
-    <ClInclude Include="Sprite.h" />
-    <ClInclude Include="TileMap.h" />
-    <ClInclude Include="utils.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

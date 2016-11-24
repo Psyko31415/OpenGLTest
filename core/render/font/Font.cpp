@@ -7,6 +7,7 @@ Font::Font(const char * fontPath, int size, FT_Library ft)
 	if (FT_New_Face(ft, fontPath, 0, &face))
 	{
 		std::cout << "ERROR: Font " << fontPath << " could not be loaded" << std::endl;
+		return;
 	}
 
 	FT_Set_Pixel_Sizes(face, 0, size);

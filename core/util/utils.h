@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <vector>
 
-#include "Mesh.h"
+#include "../render/Mesh.h"
 
 #define cubeVerts 8
 #define cubeInds 12

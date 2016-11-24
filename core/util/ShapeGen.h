@@ -6,8 +6,8 @@
 #include <matrix_transform.hpp>
 #include <cstdlib>
 
-#include "TileMap.h"
-#include "Sprite.h"
+#include "../render/Mesh.h"
+#include "../render/Sprite.h"
 
 typedef unsigned int uint;
 
