@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include <glm.hpp>
+#include <cmath>
 
 #include "utils.h"
 #include "HeighMap.h"
@@ -22,5 +23,6 @@ public:
 	void render(glm::mat4 vp);
 	void genMesh(float size, GLuint program);
 	Chunk& get(uint x, uint z);
+	int distToCenterOf(uint x, uint z, uint chunkx, uint chunkz);
 };
 

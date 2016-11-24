@@ -49,7 +49,6 @@ void HeightMap::generate(HeightType minHeight, HeightType maxHeight, uint minSte
 	}
 	noise(minHeight, maxHeight);
 	noise(minHeight, maxHeight);
-
 	for (uint x = 0; x < width; x++)
 	{
 		for (uint z = 0; z < depth; z++)
@@ -58,7 +57,7 @@ void HeightMap::generate(HeightType minHeight, HeightType maxHeight, uint minSte
 			uint baseh = basehmh * HEIGHT_MAP_TILE_RATIO;
 			int basehTot = 0, basehCount = 0;
 
-
+			/*
 			for (int i = -BASE_H_SEARCH_SIZE; i <= BASE_H_SEARCH_SIZE; i++)
 			{
 				for (int j = -BASE_H_SEARCH_SIZE; j <= BASE_H_SEARCH_SIZE; j++)
@@ -72,12 +71,11 @@ void HeightMap::generate(HeightType minHeight, HeightType maxHeight, uint minSte
 					}
 				}
 			}
-
+			*/
 			basehCount = basehCount == 0 ? 1 : basehCount;
 			get(x, z) = baseh + basehTot / basehCount;
 		}
 	}
-	
 }
 
 void HeightMap::noise(uint minHeight, uint maxHeight)

@@ -89,13 +89,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\...\gllib\glm\gtx;$(ProjectDir)\...\gllib\glm\gtc;$(ProjectDir)\..\gllib\glew\include;$(ProjectDir)\..\gllib\glm\gtc;$(ProjectDir)\..\gllib\glm\;$(ProjectDir)\..\gllib\glfw\include\GLFW</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\gllib\freetype\include\freetype2;$(ProjectDir)\..\gllib\freetype\include;$(ProjectDir)\...\gllib\glm\gtx;$(ProjectDir)\...\gllib\glm\gtc;$(ProjectDir)\..\gllib\glew\include;$(ProjectDir)\..\gllib\glm\gtc;$(ProjectDir)\..\gllib\glm\;$(ProjectDir)\..\gllib\glfw\include\GLFW</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)\..\gllib\glew\bin\Release\Win32;$(ProjectDir)\..\gllib\glfw\lib-vc2015;$(ProjectDir)\..\gllib\glew\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;glfw3dll.lib;glew32.lib;glew32s.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)\..\gllib\freetype\lib;$(ProjectDir)\..\gllib\glew\bin\Release\Win32;$(ProjectDir)\..\gllib\glfw\lib-vc2015;$(ProjectDir)\..\gllib\glew\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freetype27d.lib;freetype.lib;opengl32.lib;glfw3.lib;glfw3dll.lib;glew32.lib;glew32s.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -154,9 +154,11 @@
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Chunk.cpp" />
+    <ClCompile Include="Font.cpp" />
     <ClCompile Include="HeighMap.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="shader.cpp" />
     <ClCompile Include="ShapeGen.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="TileMap.cpp" />
@@ -164,14 +166,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="frag1.frag" />
+    <None Include="text.frag" />
+    <None Include="text.vert" />
     <None Include="vert1.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Chunk.h" />
+    <ClInclude Include="Font.h" />
     <ClInclude Include="HeighMap.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="shader.h" />
     <ClInclude Include="ShapeGen.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="TileMap.h" />

@@ -11,10 +11,14 @@
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Chunk.cpp" />
+    <ClCompile Include="shader.cpp" />
+    <ClCompile Include="Font.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vert1.vert" />
     <None Include="frag1.frag" />
+    <None Include="text.vert" />
+    <None Include="text.frag" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -26,5 +30,7 @@
     <ClInclude Include="utils.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="Chunk.h" />
+    <ClInclude Include="shader.h" />
+    <ClInclude Include="Font.h" />
   </ItemGroup>
 </Project>
