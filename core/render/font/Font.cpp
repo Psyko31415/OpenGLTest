@@ -1,6 +1,8 @@
 #include "Font.h"
 
 #define ADVANCE_SCALE 64
+#define VECTOR3F_TO_STRING_BUFFER_SIZE 100
+#define FLOAT_TO_STRING_BUFFER_SIZE 100
 
 Font::Font(const char * fontPath, int size, FT_Library ft)
 {
@@ -66,6 +68,21 @@ Font::~Font()
 	glDeleteBuffers(1, &vbo);
 	glDeleteVertexArrays(1, &vao);
 }
+
+void Font::renderFloat(GLuint program, float value, float x, float y, float scale, glm::vec4 color, glm::mat4 proj)
+{
+	char str[FLOAT_TO_STRING_BUFFER_SIZE] = { 0 };
+	snprintf(str, FLOAT_TO_STRING_BUFFER_SIZE, "%f", value);
+	renderText(program, str, x, y, scale, color, proj);
+}
+
+void Font::renderVec3(GLuint program, glm::vec3 value, float x, float y, float scale, glm::vec4 color, glm::mat4 proj)
+{
+	char str[VECTOR3F_TO_STRING_BUFFER_SIZE] = { 0 };
+	snprintf(str, VECTOR3F_TO_STRING_BUFFER_SIZE, "%f, %f, %f", value.x, value.y, value.z);
+	renderText(program, str, x, y, scale, color, proj);
+}
+
 
 void Font::renderText(GLuint program, const char * text, float x, float y, float scale, glm::vec4 color, glm::mat4 proj)
 {

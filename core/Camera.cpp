@@ -36,11 +36,6 @@ void Camera::key_input(int key, int action)
 	{
 		down = (bool)action;
 	}
-	else if (key == GLFW_KEY_P)
-	{
-		std::cout << "camera pos: " << pos.x << " " << pos.y << " " << pos.z << std::endl;
-		std::cout << "camera pos (chunk): " << (int)(pos.x / CHUNK_SIZE) << " " << pos.y << " " << (int)(pos.z / CHUNK_SIZE) << std::endl;
-	}
 }
 
 void Camera::mouse_input(int button, int action) 
@@ -102,4 +97,9 @@ glm::mat4 Camera::getProjection()
 glm::mat4 Camera::getVp()
 {
 	return projection * view;
+}
+
+glm::vec3 Camera::getPos()
+{
+	return pos;
 }

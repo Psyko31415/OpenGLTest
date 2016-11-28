@@ -1,8 +1,8 @@
 #include "Sprite.h"
 
-void Sprite::render(glm::mat4 vp)
+void Sprite::render(glm::mat4 vp, GLuint program)
 {
-	mesh->render(vp * translateMat * scaleMat * rotateMat);
+	mesh->render(vp * translateMat * scaleMat * rotateMat, program);
 }
 
 void Sprite::translate(float x, float y, float z)

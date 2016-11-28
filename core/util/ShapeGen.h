@@ -14,7 +14,7 @@ typedef unsigned int uint;
 class ShapeGen
 {
 public:
-	static Sprite * plane(float width, float depth, float shade, GLuint program);
-	static Sprite * pyramid(float width, float height, float depth, GLuint program);
+	static Sprite * plane(float width, float depth, float shade);
+	static Sprite * pyramid(float width, float height, float depth);
 };
 

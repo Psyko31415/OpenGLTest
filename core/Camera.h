@@ -33,5 +33,6 @@ public:
 	glm::mat4 getView();
 	glm::mat4 getVp();
 	glm::mat4 getProjection();
+	glm::vec3 getPos();
 };
 

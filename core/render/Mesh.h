@@ -27,19 +27,27 @@ private:
 	int vertexCount;
 	IndexData * indices;
 	int indexCount;
-	GLuint vbo, ibo, vao, program;
+	GLuint vbo, ibo, vao;
 	GLint mvpUniformId;
 
 	void bind();
 	void unbind();
 
+	void sendData();
+
 public:
-	Mesh(int vc, VertexData * verts, int ic, IndexData * IndexData, GLuint _program);
+	Mesh();
+	Mesh(int vc, VertexData * verts, int ic, IndexData * IndexData);
 	~Mesh();
 
 	VertexData * getVertices();
 	IndexData * getIndices();
 
-	void render(glm::mat4 mvp);
+	void render(glm::mat4 mvp, GLuint program);
 	void cleanup();
+
+	void setData(int vc, VertexData * verts, int ic, IndexData * indes);
+
+
+
 };

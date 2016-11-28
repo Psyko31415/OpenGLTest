@@ -28,9 +28,8 @@
     <ClCompile Include="core\util\utils.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="minecraft\Block.cpp" />
-    <ClCompile Include="minecraft\Chunk.cpp" />
-    <ClCompile Include="minecraft\HeighMap.cpp" />
     <ClCompile Include="minecraft\TileMap.cpp" />
+    <ClCompile Include="minecraft\Noise.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Camera.h" />
@@ -41,9 +40,8 @@
     <ClInclude Include="core\util\ShapeGen.h" />
     <ClInclude Include="core\util\utils.h" />
     <ClInclude Include="minecraft\Block.h" />
-    <ClInclude Include="minecraft\Chunk.h" />
-    <ClInclude Include="minecraft\HeighMap.h" />
     <ClInclude Include="minecraft\TileMap.h" />
+    <ClInclude Include="minecraft\Noise.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shader\basic\frag1.frag" />
@@ -125,13 +123,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\..\gllib\freetype\include\freetype2;$(ProjectDir)\..\gllib\freetype\include;$(ProjectDir)\...\gllib\glm\gtx;$(ProjectDir)\...\gllib\glm\gtc;$(ProjectDir)\..\gllib\glew\include;$(ProjectDir)\..\gllib\glm\gtc;$(ProjectDir)\..\gllib\glm\;$(ProjectDir)\..\gllib\glfw\include\GLFW</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\gllib\noise\include;$(ProjectDir)\..\gllib\freetype\include\freetype2;$(ProjectDir)\..\gllib\freetype\include;$(ProjectDir)\...\gllib\glm\gtx;$(ProjectDir)\...\gllib\glm\gtc;$(ProjectDir)\..\gllib\glew\include;$(ProjectDir)\..\gllib\glm\gtc;$(ProjectDir)\..\gllib\glm\;$(ProjectDir)\..\gllib\glfw\include\GLFW</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)\..\gllib\freetype\lib;$(ProjectDir)\..\gllib\glew\bin\Release\Win32;$(ProjectDir)\..\gllib\glfw\lib-vc2015;$(ProjectDir)\..\gllib\glew\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freetype27d.lib;freetype.lib;opengl32.lib;glfw3.lib;glfw3dll.lib;glew32.lib;glew32s.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)\..\gllib\noise\bin;$(ProjectDir)\..\gllib\freetype\lib;$(ProjectDir)\..\gllib\glew\bin\Release\Win32;$(ProjectDir)\..\gllib\glfw\lib-vc2015;$(ProjectDir)\..\gllib\glew\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libnoise.lib;freetype27d.lib;freetype.lib;opengl32.lib;glfw3.lib;glfw3dll.lib;glew32.lib;glew32s.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>

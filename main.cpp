@@ -20,16 +20,15 @@
 #include "core/render/font/Font.h"
 
 float WIDTH = 1024.0f, HEIGHT = 768.0f;
+Camera* cam;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
 
-Camera* cam;
-
 int main(int argc, char ** argv)
 {
- 	if (argc >= 2)
+	if (argc >= 2)
 	{
 		_chdir(argv[1]);
 	}
@@ -42,7 +41,7 @@ int main(int argc, char ** argv)
 
 	FT_Library ft;
 
-	if (FT_Init_FreeType(&ft)) 
+	if (FT_Init_FreeType(&ft))
 	{
 		std::cout << "Could not init freetype library" << std::endl;
 		return 1;
@@ -93,9 +92,9 @@ int main(int argc, char ** argv)
 	cam = new Camera((float)WIDTH / HEIGHT, glm::vec3(0, 1, 0), glm::normalize(glm::vec3(1, 1, 1)), glm::vec3(0, 0, 0), window, (int)WIDTH, (int)HEIGHT);
 	Font testFont("res/font/consola.ttf", 16, ft);
 
-	Sprite * sprite = ShapeGen::pyramid(1.0f, 3.0f, 1.0f, program);
-	TileMap tm(2, 16, 2, 1.0f, program);
-	
+	Sprite * sprite = ShapeGen::pyramid(1.0f, 3.0f, 1.0f);
+	TileMap tm(128, 32, 128);
+
 	float rot = 0.0f;
 
 	SYSTEMTIME st;
@@ -105,9 +104,10 @@ int main(int argc, char ** argv)
 	double targetTime = 1000.0 / fps;
 	int frameCount = 0;
 	double timePassed = 0;
-	
+	float displayFps = fps;
 
 	glm::vec4 red = glm::vec4(1.0f, 0.0f, 0.0f, 0.5f);
+	glm::vec4 white = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && !glfwWindowShouldClose(window))
 	{
@@ -120,18 +120,19 @@ int main(int argc, char ** argv)
 
 		if (timePassed > 1000)
 		{
-			// std::cout << "FPS: " << frameCount << std::endl;
+			displayFps = (float)frameCount;
 			frameCount = 0;
 			timePassed -= 1000;
 		}
-		
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glfwPollEvents();
-		sprite->rotate(rot, 0, 1, 0);
-		sprite->render(cam->getVp());
-		tm.render(cam->getVp());
+		sprite->rotate(rot, 1, 1, 0);
+		sprite->render(cam->getVp(), program);
+		tm.render(cam->getVp(), program);
 
-		testFont.renderText(textRenderingProgram, "Hej mamma, LOOK IM RENDERED", 300, 300, 1.0f, red, textRenderingProjection);
+		testFont.renderFloat(textRenderingProgram, displayFps, 1, HEIGHT - 15, 1.0f, white, textRenderingProjection);
+		testFont.renderVec3(textRenderingProgram, cam->getPos(), 100, HEIGHT - 15, 1.0f, white, textRenderingProjection);
 
 		glfwSwapBuffers(window);
 		cam->update();

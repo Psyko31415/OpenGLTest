@@ -3,26 +3,27 @@
 #include <GL/glew.h>
 #include <glm.hpp>
 #include <cmath>
+#include <noise/noise.h>
 
+#include "Block.h"
 #include "../core/util/utils.h"
-#include "HeighMap.h"
-#include "Chunk.h"
 
 class TileMap
 {
 private:
-	Chunk * chunks;
-	uint chunkw, chunkd, arrsize;
-	HeightType chunkh;
-	HeightMap hm;
+	BLOCK_ID * blocks;
+	uint width, height, depth;
+	uint chunkw, chunkh, chunkd;
+	Mesh * chunks;
+
+	void meshNaive();
+	Mesh& getChunk(uint x, uint y, uint z);
 
 public:
-	TileMap(uint _chunkw, HeightType _chunkh, uint _chunkd, float blocksize, GLuint program);
+	TileMap(uint _width, uint _height, uint depth);
 	~TileMap();
 
-	void render(glm::mat4 vp);
-	void genMesh(float size, GLuint program);
-	Chunk& get(uint x, uint z);
-	int distToCenterOf(uint x, uint z, uint chunkx, uint chunkz);
-};
+	void render(glm::mat4 vp, GLuint program);
 
+	BLOCK_ID& get(uint x, uint y, uint z);
+};

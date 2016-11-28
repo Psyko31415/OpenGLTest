@@ -3,7 +3,7 @@
 #define pi 3.14159265359f
 #define printvec(vec) std::cout << vec.x << " " << vec.y << " " << vec.z << std::endl
 
-Sprite * ShapeGen::pyramid(float width, float height, float depth, GLuint program)
+Sprite * ShapeGen::pyramid(float width, float height, float depth)
 {
 	float width2 = width / 2, depth2 = depth / 2;
 
@@ -39,11 +39,11 @@ Sprite * ShapeGen::pyramid(float width, float height, float depth, GLuint progra
 	VertexData * heapv = new VertexData[sizeof(vertices) / sizeof(vertices[0])];
 	memcpy(heapv, vertices, sizeof(vertices));
 
-	Mesh * mesh = new Mesh(sizeof(vertices) / sizeof(vertices[0]), heapv, sizeof(indecies) / sizeof(indecies[0]), heapi, program);
+	Mesh * mesh = new Mesh(sizeof(vertices) / sizeof(vertices[0]), heapv, sizeof(indecies) / sizeof(indecies[0]), heapi);
 	return new Sprite(mesh);
 }
 
-Sprite * ShapeGen::plane(float width, float depth, float shade, GLuint program)
+Sprite * ShapeGen::plane(float width, float depth, float shade)
 {
 	float width2 = width / 2, depth2 = depth / 2;
 
@@ -72,6 +72,6 @@ Sprite * ShapeGen::plane(float width, float depth, float shade, GLuint program)
 	VertexData * heapv = new VertexData[sizeof(vertices) / sizeof(vertices[0])];
 	memcpy(heapv, vertices, sizeof(vertices));
 
-	Mesh * mesh = new Mesh(sizeof(vertices) / sizeof(vertices[0]), heapv, sizeof(indecies) / sizeof(indecies[0]), heapi, program);
+	Mesh * mesh = new Mesh(sizeof(vertices) / sizeof(vertices[0]), heapv, sizeof(indecies) / sizeof(indecies[0]), heapi);
 	return new Sprite(mesh);
 }

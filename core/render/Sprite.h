@@ -14,7 +14,7 @@ public:
 	Sprite(Mesh* _mesh) : Sprite(_mesh, glm::mat4(1.0f), glm::mat4(1.0f), glm::mat4(1.0f)) {}
 	Sprite(Mesh* _mesh, glm::mat4 _translate, glm::mat4 _rotate, glm::mat4 _scale) : mesh(_mesh), translateMat(_translate), rotateMat(_rotate), scaleMat(_scale) {}
 
-	void render(glm::mat4 vp);
+	void render(glm::mat4 vp, GLuint program);
 	void translate(float x, float y, float z);
 	void Sprite::scale(float x, float y, float z);
 	void Sprite::scale(float f);

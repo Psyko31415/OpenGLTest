@@ -6,6 +6,7 @@
 #include <iostream>
 #include <glm.hpp>
 #include <map>
+#include <cmath>
 
 typedef struct
 {
@@ -25,5 +26,8 @@ public:
 	Font(const char * fontPath, int size, FT_Library ft);
 	~Font();
 	void renderText(GLuint program, const char * text, float x, float y, float scale, glm::vec4 color, glm::mat4 proj);
+	void renderFloat(GLuint program, float value, float x, float y, float scale, glm::vec4 color, glm::mat4 proj);
+	void renderVec3(GLuint program, glm::vec3 value, float x, float y, float scale, glm::vec4 color, glm::mat4 proj);
+
 };
 

@@ -16,3 +16,4 @@ typedef unsigned char HeightType;
 float randf();
 int randi(int min, int max);
 void cube(float width, Float3 color, Float3 color2, std::vector<VertexData>& verts, std::vector<IndexData>& inds, glm::vec3 offsetVerts);
+void cube(float width, Float3 color, Float3 color2, VertexData * verts, IndexData * inds, glm::vec3 offsetVerts, GLushort offsetInds);
