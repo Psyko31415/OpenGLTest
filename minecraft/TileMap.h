@@ -12,12 +12,8 @@
 
 typedef struct
 {
-	int dx, dy, dz;
-	unsigned char vertBits;
-	
+	int dx, dy, dz;	
 } BlockNeighbourData;
-
-extern BlockNeighbourData neighbours[cubeNeighbours];
 
 class TileMap
 {

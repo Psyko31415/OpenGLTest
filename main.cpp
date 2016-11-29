@@ -104,7 +104,7 @@ int main(int argc, char ** argv)
 	double targetTime = 1000.0 / fps;
 	int frameCount = 0;
 	double timePassed = 0;
-	float displayFps = fps;
+	float displayFps = (float)fps;
 
 	glm::vec4 red = glm::vec4(1.0f, 0.0f, 0.0f, 0.5f);
 	glm::vec4 white = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);

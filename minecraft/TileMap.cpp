@@ -1,12 +1,12 @@
 #include "TileMap.h"
-BlockNeighbourData neighbours[cubeNeighbours] =
+BlockNeighbourData cubeSideNeighbours[cubeNeighbours] =
 {
-	{  0,  1,  0, 0b00001111 },
-	{  0,  0,  1, 0b00110011 },
-	{  1,  0,  0, 0b10101010 },
-	{  0,  0, -1, 0b11001100 },
-	{ -1,  0,  0, 0b01010101 },
-	{  0, -1,  0, 0b11110000 }
+	{  0,  1,  0 },
+	{  0,  0,  1 },
+	{  1,  0,  0 },
+	{  0,  0, -1 },
+	{ -1,  0,  0 },
+	{  0, -1,  0 }
 };
 
 TileMap::TileMap(int _width, int _height, int _depth) : width(_width), height(_height), depth(_depth), chunkw(_width / CHUNK_SIZE), chunkh(_height / CHUNK_SIZE), chunkd(_depth / CHUNK_SIZE)
@@ -18,14 +18,14 @@ TileMap::TileMap(int _width, int _height, int _depth) : width(_width), height(_h
 	noise::module::Perlin noiseGen;
 	noiseGen.SetOctaveCount(4);
 
-	for (uint x = 0; x < width; x++)
+	for (int x = 0; x < width; x++)
 	{
-		for (uint z = 0; z < depth; z++)
+		for (int z = 0; z < depth; z++)
 		{
-			float y = ((height)* (1 + noiseGen.GetValue(x / 100.0f, 3.8, z / 100.0f)) / 2);
-			y = (int)y;
+			float y = ((height) * (1 + noiseGen.GetValue(x / 100.0f, 3.8, z / 100.0f)) / 2);
+			y = (int)(y * y / height);
 			get(x, y, z) = BLOCK_GRASS;
-			for (uint i = 0; i < y; i++)
+			for (int i = 0; i < y; i++)
 			{
 				get(x, i, z) = BLOCK_STONE;
 			}
@@ -71,7 +71,7 @@ void TileMap::mesh()
 								unsigned char currCubeSides = 0;
 								for (int i = 0; i < cubeSides; i++)
 								{
-									int nextx = currx + neighbours[i].dx, nexty = curry + neighbours[i].dy, nextz = currz + neighbours[i].dz;
+									int nextx = currx + cubeSideNeighbours[i].dx, nexty = curry + cubeSideNeighbours[i].dy, nextz = currz + cubeSideNeighbours[i].dz;
 									if (inside(nextx, nexty, nextz) && get(nextx, nexty, nextz) != BLOCK_AIR)
 									{
 										currCubeSides |= 0x1 << i;
