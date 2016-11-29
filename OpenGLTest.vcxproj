@@ -29,7 +29,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="minecraft\Block.cpp" />
     <ClCompile Include="minecraft\TileMap.cpp" />
-    <ClCompile Include="minecraft\Noise.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\Camera.h" />
@@ -41,7 +40,6 @@
     <ClInclude Include="core\util\utils.h" />
     <ClInclude Include="minecraft\Block.h" />
     <ClInclude Include="minecraft\TileMap.h" />
-    <ClInclude Include="minecraft\Noise.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shader\basic\frag1.frag" />

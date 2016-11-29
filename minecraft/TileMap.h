@@ -8,22 +8,35 @@
 #include "Block.h"
 #include "../core/util/utils.h"
 
+#define cubeNeighbours 6
+
+typedef struct
+{
+	int dx, dy, dz;
+	unsigned char vertBits;
+	
+} BlockNeighbourData;
+
+extern BlockNeighbourData neighbours[cubeNeighbours];
+
 class TileMap
 {
 private:
 	BLOCK_ID * blocks;
-	uint width, height, depth;
-	uint chunkw, chunkh, chunkd;
+	int width, height, depth;
+	int chunkw, chunkh, chunkd;
 	Mesh * chunks;
 
 	void meshNaive();
-	Mesh& getChunk(uint x, uint y, uint z);
+	void mesh();
+	Mesh& getChunk(int x, int y, int z);
 
 public:
-	TileMap(uint _width, uint _height, uint depth);
+	TileMap(int _width, int _height, int depth);
 	~TileMap();
 
+	bool inside(int x, int y, int z);
 	void render(glm::mat4 vp, GLuint program);
 
-	BLOCK_ID& get(uint x, uint y, uint z);
+	BLOCK_ID& get(int x, int y, int z);
 };

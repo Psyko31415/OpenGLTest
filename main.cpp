@@ -93,7 +93,7 @@ int main(int argc, char ** argv)
 	Font testFont("res/font/consola.ttf", 16, ft);
 
 	Sprite * sprite = ShapeGen::pyramid(1.0f, 3.0f, 1.0f);
-	TileMap tm(128, 32, 128);
+	TileMap tm(128, 64, 128);
 
 	float rot = 0.0f;
 
@@ -108,6 +108,8 @@ int main(int argc, char ** argv)
 
 	glm::vec4 red = glm::vec4(1.0f, 0.0f, 0.0f, 0.5f);
 	glm::vec4 white = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+	sprite->translate(-1, -0.5, 0);
 
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && !glfwWindowShouldClose(window))
 	{
@@ -127,7 +129,7 @@ int main(int argc, char ** argv)
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glfwPollEvents();
-		sprite->rotate(rot, 1, 1, 0);
+		//sprite->rotate(rot, 1, 1, 0);
 		sprite->render(cam->getVp(), program);
 		tm.render(cam->getVp(), program);
 

@@ -1,17 +1,29 @@
 #include "TileMap.h"
+BlockNeighbourData neighbours[cubeNeighbours] =
+{
+	{  0,  1,  0, 0b00001111 },
+	{  0,  0,  1, 0b00110011 },
+	{  1,  0,  0, 0b10101010 },
+	{  0,  0, -1, 0b11001100 },
+	{ -1,  0,  0, 0b01010101 },
+	{  0, -1,  0, 0b11110000 }
+};
 
-TileMap::TileMap(uint _width, uint _height, uint _depth) : width(_width), height(_height), depth(_depth), chunkw(_width / CHUNK_SIZE), chunkh(_height / CHUNK_SIZE), chunkd(_depth / CHUNK_SIZE)
+TileMap::TileMap(int _width, int _height, int _depth) : width(_width), height(_height), depth(_depth), chunkw(_width / CHUNK_SIZE), chunkh(_height / CHUNK_SIZE), chunkd(_depth / CHUNK_SIZE)
 {
 	blocks = new BLOCK_ID[width * height * depth];
 	chunks = new Mesh[chunkw * chunkh * chunkd];
 	memset(blocks, 0, width * height * depth);
+
 	noise::module::Perlin noiseGen;
-	noiseGen.SetOctaveCount(1);
+	noiseGen.SetOctaveCount(4);
+
 	for (uint x = 0; x < width; x++)
 	{
 		for (uint z = 0; z < depth; z++)
 		{
-			int y = (int)(height * (1 + noiseGen.GetValue(x / 100.0f, 3.8, z / 100.0f))) / 2;
+			float y = ((height)* (1 + noiseGen.GetValue(x / 100.0f, 3.8, z / 100.0f)) / 2);
+			y = (int)y;
 			get(x, y, z) = BLOCK_GRASS;
 			for (uint i = 0; i < y; i++)
 			{
@@ -19,7 +31,7 @@ TileMap::TileMap(uint _width, uint _height, uint _depth) : width(_width), height
 			}
 		}
 	}
-	meshNaive();
+	mesh();
 }
 
 TileMap::~TileMap()
@@ -33,24 +45,67 @@ TileMap::~TileMap()
 	delete[] blocks;
 }
 
+void TileMap::mesh()
+{
+	for (int cx = 0; cx < chunkw; cx++)
+	{
+		for (int cy = 0; cy < chunkh; cy++)
+		{
+			for (int cz = 0; cz < chunkd; cz++)
+			{
+				VertexData * verts = new VertexData[cubeVerts * CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE];
+				IndexData * inds = new IndexData[cubeInds * CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE];
+				int vertsOffset = 0, indsOffset = 0;
+				unsigned char cubeVertsBitMap = 0;
+
+				for (int x = 0; x < CHUNK_SIZE; x++)
+				{
+					for (int y = 0; y < CHUNK_SIZE; y++)
+					{
+						for (int z = 0; z < CHUNK_SIZE; z++)
+						{
+							int currx = cx * CHUNK_SIZE + x, curry = cy * CHUNK_SIZE + y, currz = cz * CHUNK_SIZE + z;
+							BLOCK_ID blockId = get(currx, curry, currz);
+							if (blockId != BLOCK_AIR)
+							{
+								unsigned char currCubeSides = 0;
+								for (int i = 0; i < cubeSides; i++)
+								{
+									int nextx = currx + neighbours[i].dx, nexty = curry + neighbours[i].dy, nextz = currz + neighbours[i].dz;
+									if (inside(nextx, nexty, nextz) && get(nextx, nexty, nextz) != BLOCK_AIR)
+									{
+										currCubeSides |= 0x1 << i;
+									}
+								}
+								partCube(1.0f, ~currCubeSides, verts, inds, vertsOffset, indsOffset, glm::vec3(currx, curry, currz), BLOCK_ARRAY[blockId].getUpperColor(), BLOCK_ARRAY[blockId].getLowerColor());
+							}
+						}
+					}
+				}
+				getChunk(cx, cy, cz).setData(vertsOffset, verts, indsOffset, inds);
+			}
+		}
+	}
+}
+
 void TileMap::meshNaive()
 {
-	for (uint cx = 0; cx < chunkw; cx++)
+	for (int cx = 0; cx < chunkw; cx++)
 	{
-		for (uint cy = 0; cy < chunkh; cy++)
+		for (int cy = 0; cy < chunkh; cy++)
 		{
-			for (uint cz = 0; cz < chunkd; cz++)
+			for (int cz = 0; cz < chunkd; cz++)
 			{
 				VertexData * verts = new VertexData[cubeVerts * CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE];
 				IndexData * inds = new IndexData[cubeInds * CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE];
 				GLushort offsetInds = 0;
 				int counter = 0;
 
-				for (uint x = 0; x < CHUNK_SIZE; x++)
+				for (int x = 0; x < CHUNK_SIZE; x++)
 				{
-					for (uint y = 0; y < CHUNK_SIZE; y++)
+					for (int y = 0; y < CHUNK_SIZE; y++)
 					{
-						for (uint z = 0; z < CHUNK_SIZE; z++)
+						for (int z = 0; z < CHUNK_SIZE; z++)
 						{
 							BLOCK_ID blockId = get(cx * CHUNK_SIZE + x, cy * CHUNK_SIZE + y, cz * CHUNK_SIZE + z);
 							if (blockId != BLOCK_AIR)
@@ -69,12 +124,12 @@ void TileMap::meshNaive()
 	}
 }
 
-BLOCK_ID& TileMap::get(uint x, uint y, uint z)
+BLOCK_ID& TileMap::get(int x, int y, int z)
 {
 	return blocks[x + y * width + z * width * height];
 }
 
-Mesh& TileMap::getChunk(uint x, uint y, uint z)
+Mesh& TileMap::getChunk(int x, int y, int z)
 {
 	return chunks[x + y * chunkw + z * chunkw * chunkh];
 }
@@ -86,4 +141,9 @@ void TileMap::render(glm::mat4 vp, GLuint program)
 	{
 		chunks[i].render(vp, program);
 	}
+}
+
+bool TileMap::inside(int x, int y, int z)
+{
+	return x >= 0 && x < width && y >= 0 && y < height && z >= 0 && z < depth;
 }
