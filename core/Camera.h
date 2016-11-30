@@ -25,7 +25,7 @@ public:
 	Camera(float ar, glm::vec3 _up, glm::vec3 _lookDir, glm::vec3 _pos, GLFWwindow* _window, int w, int h);
 	~Camera();
 
-	void key_input(int key, int action);
+	void key_input(int key, int action, int mods);
 	void mouse_input(int button, int action);
 	void mouse_move(double x, double y);
 	void update();

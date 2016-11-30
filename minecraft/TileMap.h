@@ -4,7 +4,6 @@
 #include <glm.hpp>
 #include <cmath>
 #include <noise/noise.h>
-#include <time.h>
 
 #include "Block.h"
 #include "../core/util/utils.h"
@@ -29,7 +28,7 @@ private:
 	Mesh& getChunk(int x, int y, int z);
 
 public:
-	TileMap(int _width, int _height, int depth);
+	TileMap(int _width, int _height, int _depth, int seed);
 	~TileMap();
 
 	bool inside(int x, int y, int z);

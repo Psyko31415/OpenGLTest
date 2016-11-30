@@ -9,7 +9,7 @@ BlockNeighbourData cubeSideNeighbours[cubeNeighbours] =
 	{  0, -1,  0 }
 };
 
-TileMap::TileMap(int _width, int _height, int _depth) : width(_width), height(_height), depth(_depth), chunkw(_width / CHUNK_SIZE), chunkh(_height / CHUNK_SIZE), chunkd(_depth / CHUNK_SIZE)
+TileMap::TileMap(int _width, int _height, int _depth, int seed) : width(_width), height(_height), depth(_depth), chunkw(_width / CHUNK_SIZE), chunkh(_height / CHUNK_SIZE), chunkd(_depth / CHUNK_SIZE)
 {
 	blocks = new BLOCK_ID[width * height * depth];
 	chunks = new Mesh[chunkw * chunkh * chunkd];
@@ -17,7 +17,7 @@ TileMap::TileMap(int _width, int _height, int _depth) : width(_width), height(_h
 
 	noise::module::Perlin noiseGen;
 	noiseGen.SetOctaveCount(4);
-	noiseGen.SetSeed(time(0));
+	noiseGen.SetSeed(seed);
 
 	for (int x = 0; x < width; x++)
 	{

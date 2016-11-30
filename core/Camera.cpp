@@ -18,7 +18,7 @@ Camera::~Camera()
 {
 }
 
-void Camera::key_input(int key, int action)
+void Camera::key_input(int key, int action, int mods)
 {
 	if (key == GLFW_KEY_A)
 	{

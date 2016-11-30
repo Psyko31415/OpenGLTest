@@ -93,7 +93,7 @@ int main(int argc, char ** argv)
 	Font testFont("res/font/consola.ttf", 16, ft);
 
 	Sprite * sprite = ShapeGen::pyramid(1.0f, 3.0f, 1.0f);
-	TileMap tm(256, 64, 256);
+	TileMap tm(256, 64, 256, time(0));
 
 	float rot = 0.0f;
 
@@ -154,7 +154,7 @@ static void cursor_position_callback(GLFWwindow* window, double xpos, double ypo
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	cam->key_input(key, action);
+	cam->key_input(key, action, mods);
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
