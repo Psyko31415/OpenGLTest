@@ -4,6 +4,7 @@
 #include <glm.hpp>
 #include <cmath>
 #include <noise/noise.h>
+#include <time.h>
 
 #include "Block.h"
 #include "../core/util/utils.h"

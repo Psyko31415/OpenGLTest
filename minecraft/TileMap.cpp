@@ -17,12 +17,13 @@ TileMap::TileMap(int _width, int _height, int _depth) : width(_width), height(_h
 
 	noise::module::Perlin noiseGen;
 	noiseGen.SetOctaveCount(4);
+	noiseGen.SetSeed(time(0));
 
 	for (int x = 0; x < width; x++)
 	{
 		for (int z = 0; z < depth; z++)
 		{
-			float y = ((height) * (1 + noiseGen.GetValue(x / 100.0f, 3.8, z / 100.0f)) / 2);
+			float y = ((height) * (1 + noiseGen.GetValue(x / 100.0f, 1, z / 100.0f)) / 2);
 			y = (int)(y * y / height);
 			get(x, y, z) = BLOCK_GRASS;
 			for (int i = 0; i < y; i++)
