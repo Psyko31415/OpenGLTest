@@ -1,4 +1,9 @@
 #include "TileMap.h"
+
+#define TREE_PROB 100
+
+BLOCK_ID DUMMY_BLOCK_ID_RETURNED_ON_FAILED_SAFE_GET;
+
 BlockNeighbourData cubeSideNeighbours[cubeNeighbours] =
 {
 	{  0,  1,  0 },
@@ -9,7 +14,7 @@ BlockNeighbourData cubeSideNeighbours[cubeNeighbours] =
 	{  0, -1,  0 }
 };
 
-TileMap::TileMap(int _width, int _height, int _depth, int seed) : width(_width), height(_height), depth(_depth), chunkw(_width / CHUNK_SIZE), chunkh(_height / CHUNK_SIZE), chunkd(_depth / CHUNK_SIZE)
+TileMap::TileMap(int _width, int _height, int _depth, int seed, int solidGround) : width(_width), height(_height), depth(_depth), chunkw(_width / CHUNK_SIZE), chunkh(_height / CHUNK_SIZE), chunkd(_depth / CHUNK_SIZE)
 {
 	blocks = new BLOCK_ID[width * height * depth];
 	chunks = new Mesh[chunkw * chunkh * chunkd];
@@ -23,15 +28,26 @@ TileMap::TileMap(int _width, int _height, int _depth, int seed) : width(_width),
 	{
 		for (int z = 0; z < depth; z++)
 		{
-			float y = ((height) * (1 + noiseGen.GetValue(x / 100.0f, 1, z / 100.0f)) / 2);
+			float y = (height - solidGround) * (1 + noiseGen.GetValue(x / 100.0f, 1, z / 100.0f)) / 2 + solidGround;
 			y = (int)(y * y / height);
-			get(x, y, z) = BLOCK_GRASS;
+
+			if (rand() % TREE_PROB == 0)
+			{
+				genTree(x, y, z);
+			}
+			else
+			{
+				get(x, y, z) = BLOCK_GRASS;
+			}
+
+			
 			for (int i = 0; i < y; i++)
 			{
 				get(x, i, z) = BLOCK_STONE;
 			}
 		}
 	}
+
 	mesh();
 }
 
@@ -44,6 +60,33 @@ TileMap::~TileMap()
 	}
 	delete[] chunks;
 	delete[] blocks;
+}
+
+void TileMap::genTree(int x, int y, int z)
+{
+	int minHeight = 6, maxHeight = 13;
+	int h = randi(minHeight, maxHeight);
+
+	for (int i = 0; i < h; i++)
+	{
+		int newy = y + i;
+		safeget(x, newy, z) = BLOCK_WOOD;
+	}
+
+	for (int i = minHeight - 2; i < h + 1; i++)
+	{
+		int leafSize = randi(2, 7) / 2;
+		for (int a = -leafSize; a < leafSize + 1; a++)
+		{
+			for (int b = -leafSize; b < leafSize + 1; b++)
+			{
+				if (!(a == 0 && b == 0) || i == h)
+				{
+					safeget(x + a, y + i, z + b) = BLOCK_LEAF;
+				}
+			}
+		}
+	}
 }
 
 void TileMap::mesh()
@@ -148,3 +191,13 @@ bool TileMap::inside(int x, int y, int z)
 {
 	return x >= 0 && x < width && y >= 0 && y < height && z >= 0 && z < depth;
 }
+
+BLOCK_ID& TileMap::safeget(int x, int y, int z)
+{
+	if (inside(x, y, z))
+	{
+		return get(x, y, z);
+	}
+	return DUMMY_BLOCK_ID_RETURNED_ON_FAILED_SAFE_GET;
+}
+

@@ -8,7 +8,7 @@
 #define cubeInds 12
 #define cubeSides 6
 #define HEIGHT_MAP_TILE_RATIO 8
-#define CHUNK_SIZE 8
+#define CHUNK_SIZE 16
 #define CHUNK_TO_HEIGHT_MAP_RATIO CHUNK_SIZE / HEIGHT_MAP_TILE_RATIO
 
 typedef unsigned int uint;

@@ -93,7 +93,7 @@ int main(int argc, char ** argv)
 	Font testFont("res/font/consola.ttf", 16, ft);
 
 	Sprite * sprite = ShapeGen::pyramid(1.0f, 3.0f, 1.0f);
-	TileMap tm(256, 64, 256, time(0));
+	TileMap tm(128, 96, 128, time(0), 32);
 
 	float rot = 0.0f;
 

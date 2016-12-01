@@ -26,3 +26,5 @@ extern Block BLOCK_ARRAY[];
 #define BLOCK_STONE (BLOCK_ID)1
 #define BLOCK_GRASS (BLOCK_ID)2
 #define BLOCK_RED   (BLOCK_ID)3
+#define BLOCK_WOOD  (BLOCK_ID)4
+#define BLOCK_LEAF  (BLOCK_ID)5

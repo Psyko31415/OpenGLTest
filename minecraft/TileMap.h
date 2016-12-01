@@ -26,13 +26,15 @@ private:
 	void meshNaive();
 	void mesh();
 	Mesh& getChunk(int x, int y, int z);
+	void genTree(int x, int y, int z);
 
 public:
-	TileMap(int _width, int _height, int _depth, int seed);
+	TileMap(int _width, int _height, int _depth, int seed, int solidGround);
 	~TileMap();
 
 	bool inside(int x, int y, int z);
 	void render(glm::mat4 vp, GLuint program);
 
 	BLOCK_ID& get(int x, int y, int z);
+	BLOCK_ID& safeget(int x, int y, int z);
 };
